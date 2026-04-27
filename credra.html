@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CreDra — Creative Draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06070A;--bg2:#0D0F14;--bg3:#13151C;
+  --surface:#181B24;--surface2:#1E2230;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --accent:#4FE3C1;--accent2:#6C63FF;--accent3:#F5A623;
+  --text:#E8EAF0;--text2:#9098B0;--text3:#5B6176;
+  --danger:#FF5B6B;--success:#3DD68C;
+  --radius:14px;--radius-sm:8px;--sidebar-w:240px;
+  --font-brand:'Syne',sans-serif;--font-ui:'Inter',sans-serif;
+  --grad:linear-gradient(135deg,#4FE3C1,#6C63FF);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+[data-theme="light"]{
+  --bg:#F4F4F4;--bg2:#FFFFFF;--bg3:#EBEBEB;
+  --surface:#FFFFFF;--surface2:#F0F0F0;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.14);
+  --text:#0F0F0F;--text2:#4A4A4A;--text3:#888888;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--font-ui);background:var(--bg);color:var(--text);font-size:14px;overflow:hidden}
+button{cursor:pointer;border:none;background:none;font-family:var(--font-ui)}
+input,textarea{font-family:var(--font-ui)}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:none;z-index:50;background:var(--bg)}
+.screen.active{display:flex}
+
+/* ════════════════
+   SPLASH
+════════════════ */
+#splashScreen{flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;background:var(--bg)}
+.splash-inner{text-align:center;max-width:480px;width:100%;display:flex;flex-direction:column;align-items:center;gap:52px}
+.splash-logo{display:flex;align-items:center;justify-content:center;gap:12px;animation:fadeUp 0.5s var(--ease)}
+.splash-mark{width:56px;height:56px;border-radius:16px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-brand);font-weight:800;font-size:22px;color:#0A0B0F}
+.splash-brand-wrap{text-align:left}
+.splash-brand{font-family:var(--font-brand);font-weight:800;font-size:28px;line-height:1;color:var(--text)}
+.splash-brand-sub{font-family:var(--font-brand);font-size:10px;color:var(--text3);letter-spacing:0.12em;font-weight:600;margin-top:2px}
+.splash-headline{font-family:var(--font-ui);font-size:36px;font-weight:600;line-height:1.2;letter-spacing:-0.02em;color:var(--text);animation:fadeUp 0.5s var(--ease) 0.1s both}
+.splash-headline em{font-style:normal;color:var(--accent)}
+.splash-body{font-family:var(--font-ui);font-size:20px;font-weight:700;color:var(--text);line-height:1.5;letter-spacing:-0.03em;animation:fadeUp 0.5s var(--ease) 0.2s both}
+.splash-btns{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;animation:fadeUp 0.5s var(--ease) 0.3s both}
+.btn-primary{background:var(--grad);color:#0A0B0F;padding:16px 40px;border-radius:30px;font-weight:700;font-size:15px;width:100%;max-width:360px;transition:opacity 0.2s,transform 0.15s;letter-spacing:-0.01em}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:16px 40px;border-radius:30px;font-weight:500;font-size:15px;width:100%;max-width:360px;transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.splash-proof{display:flex;justify-content:center;gap:28px;margin-top:40px;animation:fadeUp 0.5s var(--ease) 0.4s both}
+.splash-proof-item{font-size:12px;color:var(--text3);font-weight:500}
+.splash-proof-item span{color:var(--text2);font-weight:600}
+
+/* ════════════════
+   AUTH
+════════════════ */
+.auth-screen{flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.auth-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px;animation:fadeUp 0.4s var(--ease)}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:center}
+.auth-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--font-brand);font-weight:800;font-size:15px;color:#0A0B0F}
+.auth-title{font-size:22px;font-weight:600;text-align:center;letter-spacing:-0.02em;font-family:var(--font-brand)}
+.auth-sub{font-size:13px;color:var(--text3);text-align:center;font-weight:400;line-height:1.6;margin-bottom:8px}
+.auth-field{display:flex;flex-direction:column;gap:6px}
+.auth-label{font-size:11px;font-weight:600;color:var(--text2);display:block;letter-spacing:0.03em;text-transform:uppercase}
+.auth-input{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px 14px;border-radius:var(--radius-sm);font-size:13px;outline:none;transition:border-color 0.2s;font-weight:400}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input::placeholder{color:var(--text3)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:6px 0}
+.auth-divider-line{flex:1;height:1px;background:var(--border)}
+.auth-divider-txt{font-size:11px;color:var(--text3);font-weight:500}
+.x-btn{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+.x-btn:hover{border-color:var(--accent);color:var(--accent)}
+.auth-switch{text-align:center;margin-top:8px;font-size:13px;color:var(--text3)}
+.auth-switch a{color:var(--accent);cursor:pointer;font-weight:600}
+.auth-back{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--text3);cursor:pointer;margin-top:4px;font-weight:500}
+.auth-back:hover{color:var(--text)}
+
+/* ════════════════
+   CONNECT X
+════════════════ */
+#connectScreen{flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.connect-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:460px;display:flex;flex-direction:column;gap:16px;animation:fadeUp 0.4s var(--ease)}
+.connect-x-icon{width:56px;height:56px;border-radius:16px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto}
+.connect-title{font-size:21px;font-weight:700;text-align:center;letter-spacing:-0.02em;font-family:var(--font-brand)}
+.connect-desc{font-size:13px;color:var(--text2);line-height:1.7;text-align:center;font-weight:400}
+.connect-reads{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px}
+.connect-reads-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.connect-read-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text2);padding:5px 0;font-weight:400}
+.connect-read-item span{color:var(--accent);font-size:14px}
+.connect-accounts{display:flex;flex-direction:column;gap:10px}
+.ca-row{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.ca-row:hover{border-color:var(--accent)}
+.ca-row.sel{border-color:var(--accent);background:rgba(79,227,193,0.05)}
+.ca-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.ca-info{flex:1}
+.ca-name{font-size:13px;font-weight:600}
+.ca-handle{font-size:11px;color:var(--text3)}
+.ca-check{font-size:15px;color:var(--accent)}
+
+/* ════════════════
+   NICHE AUTO-DETECT
+════════════════ */
+#nicheScreen{flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.niche-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:16px;animation:fadeUp 0.4s var(--ease);margin:24px 0}
+.niche-title{font-size:21px;font-weight:700;text-align:center;letter-spacing:-0.02em;font-family:var(--font-brand)}
+.niche-sub{font-size:13px;color:var(--text2);text-align:center;font-weight:400;line-height:1.6}
+.detected-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em}
+.niche-detected-list{display:flex;flex-direction:column;gap:10px}
+.niche-det-item{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.niche-det-item.on{border-color:var(--accent);background:rgba(79,227,193,0.05)}
+.niche-det-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.niche-det-info{flex:1}
+.niche-det-name{font-size:13px;font-weight:600}
+.niche-det-sub{font-size:11px;color:var(--text3);margin-top:2px;font-weight:400}
+.niche-toggle{width:36px;height:20px;border-radius:20px;background:var(--surface2);position:relative;flex-shrink:0;transition:background 0.2s}
+.niche-toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform 0.2s}
+.niche-det-item.on .niche-toggle{background:var(--accent)}
+.niche-det-item.on .niche-toggle::after{transform:translateX(16px)}
+.niche-add-section{border-top:1px solid var(--border);padding-top:16px;display:flex;flex-direction:column;gap:10px}
+.niche-add-label{font-size:11px;color:var(--text3);font-weight:500}
+.niche-add-row{display:flex;gap:8px}
+.niche-add-input{flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 13px;border-radius:var(--radius-sm);font-size:13px;outline:none;transition:border-color 0.2s}
+.niche-add-input:focus{border-color:var(--accent)}
+.niche-add-input::placeholder{color:var(--text3)}
+.niche-add-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);padding:10px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.niche-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.niche-custom-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.niche-custom-tag{background:rgba(79,227,193,0.1);border:1px solid rgba(79,227,193,0.25);color:var(--accent);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.niche-custom-tag span{cursor:pointer;color:var(--text3);font-size:13px}
+.niche-custom-tag span:hover{color:var(--danger)}
+
+/* ════════════════
+   TRAINING
+════════════════ */
+#trainingScreen{flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.training-inner{text-align:center;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.training-ring{width:64px;height:64px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--accent);animation:spin 1s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.training-title{font-family:var(--font-brand);font-size:22px;font-weight:700;letter-spacing:-0.02em}
+.training-sub{font-size:13px;color:var(--text2);line-height:1.7;font-weight:400}
+.t-steps{display:flex;flex-direction:column;gap:12px;text-align:left;width:100%}
+.ts{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text3);font-weight:400;transition:all 0.3s}
+.ts-dot{width:28px;height:28px;border-radius:8px;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all 0.3s}
+.ts.active .ts-dot{background:rgba(79,227,193,0.12);border-color:var(--accent);color:var(--accent)}
+.ts.active{color:var(--text2)}
+.ts.done .ts-dot{background:rgba(61,214,140,0.12);border-color:rgba(61,214,140,0.3);color:var(--success)}
+.ts.done{color:var(--text2)}
+
+/* ════════════════
+   APP
+════════════════ */
+#appScreen{flex-direction:row}
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:0;padding:0;z-index:10;font-family:var(--font-ui);height:100%;overflow:hidden}
+.sidebar-logo{display:flex;align-items:center;gap:12px;padding:24px 20px;border-bottom:1px solid var(--border)}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#0A0B0F}
+.logo-text{font-family:var(--font-brand);font-weight:800;font-size:18px}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:0.1em;font-weight:700}
+
+/* account switcher */
+.acct-sw{position:relative;margin:16px 12px 0;cursor:pointer}
+.acct-row{display:flex;align-items:center;gap:12px;padding:12px 12px;border-radius:var(--radius-sm);border:1px solid transparent;transition:all 0.2s}
+.acct-row:hover{background:var(--surface);border-color:var(--border)}
+.av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.acct-info{flex:1;min-width:0}
+.acct-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acct-handle{color:var(--text3);font-size:11px;font-weight:600}
+.acct-caret{font-size:10px;color:var(--text3);transition:transform 0.2s;flex-shrink:0}
+.acct-sw.open .acct-caret{transform:rotate(180deg)}
+.acct-drop{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);overflow:hidden;z-index:300;box-shadow:0 8px 28px rgba(0,0,0,0.5)}
+.acct-sw.open .acct-drop{display:block}
+.ad-item{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;transition:all 0.15s}
+.ad-item:hover{background:var(--surface)}
+.ad-item.cur{background:rgba(79,227,193,0.06)}
+.ad-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.ad-name{font-size:12px;font-weight:600;color:var(--text)}
+.ad-handle{font-size:10px;color:var(--text3)}
+.ad-active{margin-left:auto;font-size:10px;color:var(--accent);font-weight:600}
+.ad-div{height:1px;background:var(--border);margin:3px 0}
+.ad-action{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;font-size:11px;font-weight:600;color:var(--text2);transition:all 0.15s}
+.ad-action:hover{background:var(--surface);color:var(--text)}
+.ad-action.red{color:var(--danger)}
+.ad-action.red:hover{background:rgba(255,91,107,0.08)}
+
+/* niche selector */
+.niche-wrapper{position:relative;margin:12px 12px 0}
+.niche-sel{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color 0.2s}
+.niche-sel:hover{border-color:var(--accent)}
+.niche-lbl{font-size:10px;color:var(--text3);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;font-family:var(--font-ui)}
+.niche-val{font-size:13px;font-weight:800;color:var(--accent);font-family:var(--font-ui)}
+.niche-arr{font-size:10px;color:var(--text3);transition:transform 0.2s}
+.niche-wrapper.open .niche-arr{transform:rotate(180deg)}
+.niche-drop{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);overflow:hidden;z-index:200;box-shadow:0 8px 28px rgba(0,0,0,0.45)}
+.niche-wrapper.open .niche-drop{display:block}
+.niche-opt{padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer;color:var(--text2);transition:all 0.15s;display:flex;align-items:center;gap:8px;font-family:var(--font-ui)}
+.niche-opt:hover{background:var(--surface);color:var(--text)}
+.niche-opt.sel{color:var(--accent);background:rgba(79,227,193,0.07)}
+.niche-opt .dot{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.niche-opt.sel .dot{background:var(--grad)}
+
+/* nav */
+.sidebar-nav{flex:1;padding:16px 10px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.nav-sec{font-size:10px;font-weight:800;color:var(--text2);letter-spacing:0.12em;text-transform:uppercase;padding:16px 12px 8px;font-family:var(--font-ui)}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);transition:all 0.18s var(--ease);font-size:13px;font-weight:700;font-family:var(--font-ui)}
+.nav-item:hover{background:var(--surface);color:var(--text)}
+.nav-item.active{background:linear-gradient(90deg,rgba(79,227,193,0.13),rgba(108,99,255,0.06));color:var(--accent);border-left:2px solid transparent;border-image:var(--grad);border-image-slice:1;padding-left:8px}
+.nav-icon{font-size:15px;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--grad);color:#0A0B0F;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px}
+.theme-toggle{margin:12px 12px 20px;background:var(--bg3);border:1px solid var(--border);border-radius:30px;display:flex;overflow:hidden;flex-shrink:0}
+.theme-btn{flex:1;padding:8px;text-align:center;font-size:11px;cursor:pointer;transition:all 0.2s;color:var(--text3);font-weight:700;font-family:var(--font-ui)}
+.theme-btn.active{background:var(--surface2);color:var(--text)}
+
+/* main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
+.topbar-left h1{font-weight:600;font-size:18px;letter-spacing:-0.02em}
+.topbar-left p{color:var(--text3);font-size:12px;margin-top:2px;font-weight:400}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.qd-btn{display:flex;align-items:center;gap:7px;background:var(--grad);color:#0A0B0F;padding:9px 18px;border-radius:30px;font-weight:600;font-size:13px;transition:opacity 0.2s,transform 0.15s;box-shadow:0 4px 20px rgba(79,227,193,0.2)}
+.qd-btn:hover{opacity:0.88;transform:translateY(-1px)}
+.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:15px;transition:all 0.2s}
+.icon-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* panels */
+.content{flex:1;overflow-y:auto;padding:28px 32px;display:flex;flex-direction:column;gap:24px}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.panel-hidden{display:none!important}
+
+/* motivation */
+.motiv{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;gap:16px}
+.motiv-emoji{font-size:22px;flex-shrink:0}
+.motiv-body{flex:1}
+.motiv-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.motiv-sub{font-size:12px;color:var(--text2);font-weight:400}
+.motiv-x{font-size:16px;color:var(--text3);cursor:pointer;padding:4px;flex-shrink:0}
+.motiv-x:hover{color:var(--text)}
+
+/* stats */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc-teal::before{background:var(--grad)}
+.sc-violet::before{background:var(--grad)}
+.sc-amber::before{background:var(--grad)}
+.stat-lbl{font-size:11px;color:var(--text3);font-weight:500}
+.stat-num{font-size:32px;font-weight:700;line-height:1;margin:8px 0 4px;letter-spacing:-0.03em}
+.sn-teal{color:var(--accent)}.sn-violet{color:var(--accent2)}.sn-amber{color:var(--accent3)}
+.stat-sub{font-size:11px;color:var(--text3);font-weight:400}
+.sdots{display:flex;gap:5px;margin-top:10px}
+.sdot{width:22px;height:22px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.sdot.done{background:rgba(79,227,193,0.18);color:var(--accent)}
+.sdot.today{background:var(--grad);color:#0A0B0F}
+
+/* section card */
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.sc-title{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.sc-sub{font-size:12px;color:var(--text3);font-weight:400;margin-top:3px}
+.see-all{font-size:12px;color:var(--accent);font-weight:500;cursor:pointer;white-space:nowrap}
+.see-all:hover{text-decoration:underline}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--grad);display:inline-block;animation:blink 1.5s ease-in-out infinite;vertical-align:middle;margin-right:6px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* tone chips */
+.tone-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);align-items:center}
+.tone-label{font-size:11px;color:var(--text3);font-weight:500;margin-right:2px;white-space:nowrap}
+.tone-chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border2);color:var(--text3);transition:all 0.18s}
+.tone-chip:hover{color:var(--text)}
+.tone-chip.active{background:linear-gradient(135deg,rgba(79,227,193,0.12),rgba(108,99,255,0.15));color:var(--accent2);border-color:var(--accent2)}
+
+/* sub-tabs */
+.sub-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.sub-tab{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border2);color:var(--text3);transition:all 0.18s}
+.sub-tab:hover{color:var(--text)}
+.sub-tab.active{background:linear-gradient(135deg,rgba(79,227,193,0.12),rgba(108,99,255,0.12));color:var(--accent);border-color:var(--accent)}
+
+/* draft grid */
+.drafts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.draft-card{background:linear-gradient(135deg,rgba(79,227,193,0.06),rgba(108,99,255,0.06));border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;transition:all 0.2s var(--ease)}
+.draft-card:hover{border-color:transparent;border-left:2px solid transparent;border-image:var(--grad);border-image-slice:1;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.dtype{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:3px 9px;border-radius:20px;align-self:flex-start}
+.dtype.thread{background:rgba(108,99,255,0.15);color:var(--accent2)}
+.dtype.tweet{background:rgba(79,227,193,0.1);color:var(--accent)}
+.dcontent{font-size:13px;line-height:1.7;color:var(--text);flex:1;font-weight:400}
+.dcontent strong{color:var(--accent);font-weight:600}
+.draft-meta{display:flex;align-items:center;justify-content:space-between}
+.char-count{font-size:10px;color:var(--text3);font-weight:500}
+.char-count.warn{color:var(--accent3)}.char-count.over{color:var(--danger)}
+.best-time{font-size:10px;color:var(--accent3);font-weight:500}
+.dfooter{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);gap:6px;flex-wrap:wrap}
+.vscore{display:flex;align-items:center;gap:6px;font-size:11px}
+.vlbl{color:var(--text3);font-weight:400}
+.vbar{width:44px;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.vfill{height:100%;border-radius:2px}
+.vfill.high{background:var(--grad);width:92%}.vfill.med{background:var(--grad);width:74%;opacity:0.65}
+.vpct{font-weight:600;font-size:11px}
+.vpct.high{color:var(--success)}.vpct.med{color:var(--accent3)}
+.dactions{display:flex;gap:4px;flex-wrap:wrap}
+.abtn{padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.18s;border:1px solid transparent}
+.abtn.approve{background:rgba(61,214,140,0.1);color:var(--success);border-color:rgba(61,214,140,0.25)}
+.abtn.approve:hover{background:var(--grad);color:#0A0B0F;border-color:transparent}
+.abtn.edit{background:var(--surface2);color:var(--text2);border-color:var(--border2)}
+.abtn.edit:hover{color:var(--text)}
+.abtn.regen{background:rgba(245,166,35,0.1);color:var(--accent3);border-color:rgba(245,166,35,0.2)}
+.abtn.regen:hover{background:var(--accent3);color:#0A0B0F}
+.abtn.notme{background:rgba(255,91,107,0.08);color:var(--danger);border-color:rgba(255,91,107,0.2)}
+.abtn.notme:hover{background:var(--danger);color:#fff}
+.abtn.wa{background:rgba(37,211,102,0.1);color:#25D366;border-color:rgba(37,211,102,0.2)}
+.abtn.wa:hover{background:#25D366;color:#fff}
+.clip-banner{background:rgba(61,214,140,0.07);border:1px solid rgba(61,214,140,0.2);border-radius:var(--radius-sm);padding:9px 13px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--success);margin-bottom:6px}
+.discard-fb{display:none;background:rgba(255,91,107,0.05);border:1px dashed rgba(255,91,107,0.25);border-radius:var(--radius-sm);padding:9px 11px;gap:7px;align-items:center}
+.discard-fb.open{display:flex}
+.discard-inp{flex:1;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:var(--radius-sm);font-size:12px;outline:none}
+.discard-inp::placeholder{color:var(--text3)}
+.discard-inp:focus{border-color:var(--danger)}
+.discard-send{background:var(--danger);color:#fff;padding:7px 12px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* trends */
+.ti{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);transition:all 0.2s;cursor:pointer;margin-bottom:10px}
+.ti:last-child{margin-bottom:0}
+.ti:hover{border-color:var(--accent3)}
+.ti-rank{font-size:15px;font-weight:700;color:var(--text3);width:22px;text-align:center}
+.ti-body{flex:1}
+.ti-name{font-size:13px;font-weight:600}
+.ti-ctx{font-size:11px;color:var(--text3);margin-top:2px;font-weight:400}
+.ttag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;background:rgba(245,166,35,0.15);color:var(--accent3);white-space:nowrap}
+.tage{font-size:10px;color:var(--text3);white-space:nowrap}
+.dtb{background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:6px 13px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.dtb:hover{background:var(--accent);color:#0A0B0F;border-color:var(--accent)}
+
+/* log */
+.log-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none;padding-bottom:0}
+.log-icon{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;background:rgba(79,227,193,0.1);color:var(--accent)}
+.log-text{font-size:12px;color:var(--text2);line-height:1.55;font-weight:400}
+.log-text strong{color:var(--text);font-weight:600}
+.log-time{font-size:10px;color:var(--text3);margin-top:3px}
+
+/* replies */
+.reply-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;transition:all 0.2s}
+.reply-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.orig-c{background:var(--bg3);border-left:3px solid var(--border2);padding:9px 11px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:12px;color:var(--text2);line-height:1.55;font-weight:400}
+.orig-meta{font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.reply-text{font-size:13px;line-height:1.65;color:var(--text);font-weight:400}
+.reply-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.ox-btn{font-size:11px;color:var(--text3);font-weight:500;cursor:pointer}
+.ox-btn:hover{color:var(--accent)}
+.pbadge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.pbadge.high{background:rgba(255,91,107,0.12);color:var(--danger)}
+.pbadge.med{background:rgba(245,166,35,0.12);color:var(--accent3)}
+.reply-all-btn{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;padding:9px 18px;border-radius:30px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(108,99,255,0.2);transition:opacity 0.2s}
+.reply-all-btn:hover{opacity:0.88}
+
+/* trend full */
+.tfc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;transition:all 0.2s}
+.tfc:hover{border-color:var(--accent3);transform:translateY(-2px)}
+.tfn{font-size:16px;font-weight:600;letter-spacing:-0.01em;margin-bottom:5px}
+.tfc-ctx{font-size:13px;color:var(--text2);line-height:1.6;font-weight:400}
+.tfc-meta{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.relnum{font-weight:600;color:var(--accent)}
+
+/* feedback */
+.fb-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:12px}
+.fb-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.07em}
+.fb-prev{font-size:12px;color:var(--text2);background:var(--bg3);padding:9px 11px;border-radius:var(--radius-sm);border:1px dashed var(--border2);font-weight:400}
+.fb-given{font-size:13px;color:var(--text);background:rgba(79,227,193,0.05);padding:9px 11px;border-radius:var(--radius-sm);border-left:3px solid var(--accent);line-height:1.55;font-weight:400}
+.fb-outcome{font-size:11px;color:var(--success);font-weight:500}
+.vn-row{display:flex;gap:8px}
+.vn-field{flex:1;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:9px 13px;border-radius:var(--radius-sm);font-size:13px;outline:none;transition:border-color 0.2s;font-weight:400}
+.vn-field:focus{border-color:var(--accent)}
+.vn-field::placeholder{color:var(--text3)}
+.vn-add{background:var(--accent);color:#0A0B0F;padding:9px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap}
+
+/* settings */
+.set-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.set-sec-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;margin-top:18px}
+.set-sec-lbl:first-child{margin-top:0}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)}
+.set-row:last-child{border-bottom:none;padding-bottom:0}
+.set-lbl{font-size:13px;font-weight:600}
+.set-sub{font-size:12px;color:var(--text3);margin-top:3px;font-weight:400;max-width:280px;line-height:1.5}
+.set-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);padding:7px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;margin-left:16px;flex-shrink:0;transition:all 0.2s}
+.set-btn:hover{color:var(--text)}
+.set-btn.ok{background:rgba(61,214,140,0.1);color:var(--success);border-color:rgba(61,214,140,0.25)}
+.set-btn.red{background:rgba(255,91,107,0.08);color:var(--danger);border-color:rgba(255,91,107,0.2)}
+.set-btn.red:hover{background:var(--danger);color:#fff}
+.set-acct-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.set-acct-row:last-of-type{border-bottom:none}
+.set-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.set-acct-name{font-size:13px;font-weight:600}
+.set-acct-handle{font-size:11px;color:var(--text3)}
+.set-acct-badge{font-size:10px;color:var(--accent);font-weight:600;background:rgba(79,227,193,0.1);padding:2px 8px;border-radius:20px}
+
+/* modals */
+.modal-ov,.swipe-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);z-index:400;align-items:center;justify-content:center}
+.modal-ov.open,.swipe-ov.open{display:flex}
+.modal,.swipe-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:18px;padding:26px;animation:fadeUp 0.3s var(--ease)}
+.modal{width:480px;max-width:95vw}
+.swipe-modal{width:520px;max-width:95vw}
+.modal-title{font-size:17px;font-weight:600;margin-bottom:5px;letter-spacing:-0.01em}
+.modal-sub{color:var(--text3);font-size:12px;margin-bottom:18px;font-weight:400;line-height:1.6}
+.modal-ta{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:12px 14px;border-radius:var(--radius);font-size:13px;outline:none;resize:none;min-height:90px;transition:border-color 0.2s;font-weight:400}
+.modal-ta:focus{border-color:var(--accent)}
+.modal-ta::placeholder{color:var(--text3)}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.m-cancel{padding:9px 16px;border-radius:30px;border:1px solid var(--border2);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer}
+.m-cancel:hover{color:var(--text)}
+.m-submit{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0A0B0F;padding:9px 20px;border-radius:30px;font-weight:600;font-size:12px;cursor:pointer}
+.m-submit:hover{opacity:0.9}
+.swipe-ctr{font-size:11px;color:var(--text3);font-weight:500;margin-bottom:14px}
+.swipe-x{float:right;font-size:18px;cursor:pointer;color:var(--text3)}
+.swipe-x:hover{color:var(--text)}
+.swipe-cmt{background:var(--bg3);border-left:3px solid var(--border2);padding:9px 11px;border-radius:0 4px 4px 0;font-size:12px;color:var(--text2);margin-bottom:12px}
+.swipe-dft{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:16px;font-weight:400}
+.swipe-actions{display:flex;gap:8px;justify-content:flex-end}
+.sw{padding:9px 18px;border-radius:30px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all 0.18s}
+.sw.post{background:var(--success);color:#0A0B0F}
+.sw.skip{background:var(--surface);border-color:var(--border2);color:var(--text2)}
+.sw.ed{background:rgba(108,99,255,0.15);color:var(--accent2);border-color:rgba(108,99,255,0.3)}
+
+.topbar-avatar{width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#0A0B0F;cursor:pointer;position:relative;flex-shrink:0;transition:opacity 0.2s}
+.topbar-avatar:hover{opacity:0.85}
+.topbar-avatar .notif-dot{position:absolute;top:0;right:0;width:9px;height:9px;border-radius:50%;background:var(--danger);border:2px solid var(--bg)}
+.topbar-avatar-drop{display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:8px;min-width:220px;z-index:300;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.topbar-avatar-wrap{position:relative}
+.topbar-avatar-wrap.open .topbar-avatar-drop{display:block}
+.tav-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.tav-av{width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#0A0B0F;flex-shrink:0}
+.tav-name{font-size:13px;font-weight:700;color:var(--text)}
+.tav-handle{font-size:11px;color:var(--text3)}
+.tav-switch-section{padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
+.tav-switch-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:4px 12px 8px}
+.tav-switch-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background 0.15s}
+.tav-switch-item:hover{background:var(--surface)}
+.tav-switch-item.cur-acct{background:rgba(79,227,193,0.06)}
+.tav-switch-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#0A0B0F;flex-shrink:0}
+.tav-switch-av.add-av{background:var(--surface2);color:var(--text2);font-size:14px;font-weight:400}
+.tav-switch-name{font-size:12px;font-weight:700;color:var(--text)}
+.tav-switch-handle{font-size:10px;color:var(--text3)}
+.tav-switch-active{margin-left:auto;font-size:10px;color:var(--accent);font-weight:700}
+
+.tav-action{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-radius:var(--radius-sm);transition:all 0.15s}
+.tav-action:hover{background:var(--surface);color:var(--text)}
+.tav-action.red{color:var(--danger)}
+.tav-action.red:hover{background:rgba(255,91,107,0.08)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+*{scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+</style>
+</head>
+<body>
+
+<!-- ══ SPLASH ══ -->
+<div class="screen active" id="splashScreen">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <div class="splash-mark">Cd</div>
+      <div class="splash-brand-wrap">
+        <div class="splash-brand">CreDra</div>
+        <div class="splash-brand-sub">Creative · Draft</div>
+      </div>
+    </div>
+    <div class="splash-headline">The version of you that posts every day.</div>
+    <div class="splash-btns">
+      <button class="btn-primary" onclick="goTo('signupScreen')">Create Account</button>
+      <button class="btn-ghost" onclick="goTo('loginScreen')">Log in</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="screen auth-screen" id="loginScreen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-mark">Cd</div>
+      <div style="font-family:var(--font-brand);font-weight:700;font-size:18px">CreDra</div>
+    </div>
+    <div class="auth-title">Good to have you back.</div>
+    <div class="auth-sub">Your drafts are waiting.</div>
+    <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" placeholder="you@example.com"/></div>
+    <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" placeholder="••••••••"/></div>
+    <button class="btn-primary" style="margin-top:6px" onclick="goToApp('login')">Log in</button>
+    <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-txt">or</div><div class="auth-divider-line"></div></div>
+    <button class="x-btn" onclick="goToApp('login')">𝕏 &nbsp;Continue with X</button>
+    <div class="auth-switch">No account yet? <a onclick="goTo('signupScreen')">Sign up</a></div>
+    <div class="auth-back" onclick="goTo('splashScreen')">← Back</div>
+  </div>
+</div>
+
+<!-- ══ SIGN UP ══ -->
+<div class="screen auth-screen" id="signupScreen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-mark">Cd</div>
+      <div style="font-family:var(--font-brand);font-weight:700;font-size:18px">CreDra</div>
+    </div>
+    <div class="auth-title">Let's build your voice.</div>
+    <div class="auth-sub">Tell us who you are. CreDra handles the rest.</div>
+    <div class="auth-field"><label class="auth-label">Full Name</label><input class="auth-input" type="text" placeholder="Dr. Taiwo M."/></div>
+    <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" placeholder="you@example.com"/></div>
+    <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" placeholder="Min. 8 characters"/></div>
+    <button class="btn-primary" style="margin-top:6px" onclick="goTo('connectScreen')">Continue →</button>
+    <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-txt">or</div><div class="auth-divider-line"></div></div>
+    <button class="x-btn" onclick="goTo('connectScreen')">𝕏 &nbsp;Sign up with X</button>
+    <div class="auth-switch">Already have an account? <a onclick="goTo('loginScreen')">Log in</a></div>
+    <div class="auth-back" onclick="goTo('splashScreen')">← Back</div>
+  </div>
+</div>
+
+<!-- ══ CONNECT X ══ -->
+<div class="screen" id="connectScreen" style="flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div class="connect-box">
+    <div class="auth-back" onclick="goTo('signupScreen')" style="justify-content:flex-start;margin-bottom:18px">← Back</div>
+    <div class="connect-x-icon">𝕏</div>
+    <div class="connect-title">First — let CreDra listen.</div>
+    <div class="connect-desc">The more you've posted, the better CreDra gets at sounding like you. Connect your X account and let it study how you write.</div>
+    <div class="connect-reads">
+      <div class="connect-reads-lbl">What CreDra reads</div>
+      <div class="connect-read-item"><span>✦</span> Your tweets and threads</div>
+      <div class="connect-read-item"><span>✦</span> Your replies and how you engage</div>
+      <div class="connect-read-item"><span>✦</span> Your posting patterns and rhythm</div>
+    </div>
+    <div class="connect-accounts">
+      <div class="ca-row sel" onclick="selAcct(this)">
+        <div class="ca-av" style="background:linear-gradient(135deg,#4FE3C1,#6C63FF)">TM</div>
+        <div class="ca-info"><div class="ca-name">Dr. Taiwo M.</div><div class="ca-handle">@drtaiwom · 4,200 tweets</div></div>
+        <div class="ca-check">✓</div>
+      </div>
+      <div class="ca-row" onclick="selAcct(this)">
+        <div class="ca-av" style="background:linear-gradient(135deg,#F5A623,#FF5B6B)">SJ</div>
+        <div class="ca-info"><div class="ca-name">Sir Jarus</div><div class="ca-handle">@sirjarus · 12,100 tweets</div></div>
+        <div class="ca-check" style="display:none">✓</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goTo('nicheScreen')">Let's go →</button>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">You can connect more accounts later</div>
+  </div>
+</div>
+
+<!-- ══ NICHE AUTO-DETECT ══ -->
+<div class="screen" id="nicheScreen" style="flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;padding:24px">
+  <div class="niche-box">
+    <div class="auth-back" onclick="goTo('connectScreen')" style="justify-content:flex-start;margin-bottom:18px">← Back</div>
+    <div class="niche-title">We read your timeline.<br>Here's what we found.</div>
+    <div class="niche-sub">CreDra detected these topics from your posts. Switch off what doesn't fit — and add anything we missed.</div>
+    <div class="detected-label">Detected from your tweets</div>
+    <div class="niche-detected-list" id="nicheDetList">
+      <div class="niche-det-item on" onclick="toggleNicheItem(this)">
+        <div class="niche-det-icon">⚖️</div>
+        <div class="niche-det-info"><div class="niche-det-name">Immigration &amp; Law</div><div class="niche-det-sub">Your most consistent topic</div></div>
+        <div class="niche-toggle"></div>
+      </div>
+      <div class="niche-det-item on" onclick="toggleNicheItem(this)">
+        <div class="niche-det-icon">🧠</div>
+        <div class="niche-det-info"><div class="niche-det-name">Mindset &amp; Coaching</div><div class="niche-det-sub">Strong presence in your threads</div></div>
+        <div class="niche-toggle"></div>
+      </div>
+      <div class="niche-det-item on" onclick="toggleNicheItem(this)">
+        <div class="niche-det-icon">📈</div>
+        <div class="niche-det-info"><div class="niche-det-name">Business &amp; Finance</div><div class="niche-det-sub">Appears frequently in your content</div></div>
+        <div class="niche-toggle"></div>
+      </div>
+      <div class="niche-det-item" onclick="toggleNicheItem(this)">
+        <div class="niche-det-icon">🙏</div>
+        <div class="niche-det-info"><div class="niche-det-name">Faith &amp; Lifestyle</div><div class="niche-det-sub">Detected occasionally</div></div>
+        <div class="niche-toggle"></div>
+      </div>
+    </div>
+    <div class="niche-add-section">
+      <div class="niche-add-label">Missing something? Add your own niche.</div>
+      <div class="niche-add-row">
+        <input class="niche-add-input" id="nicheAddInput" placeholder='e.g. "Real Estate" or "Parenting"'/>
+        <button class="niche-add-btn" onclick="addCustomNiche()">+ Add</button>
+      </div>
+      <div class="niche-custom-tags" id="customNicheTags"></div>
+    </div>
+    <button class="btn-primary" style="margin-top:20px" onclick="goTo('trainingScreen');startTraining()">These are my niches →</button>
+  </div>
+</div>
+
+<!-- ══ VOICE TRAINING ══ -->
+<div class="screen" id="trainingScreen" style="flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div class="training-inner">
+    <div class="training-ring" id="trainRing"></div>
+    <div class="training-title">CreDra is getting to know you…</div>
+    <div class="training-sub">Reading your timeline. Learning your patterns.<br>Building your voice profile.</div>
+    <div class="t-steps">
+      <div class="ts active" id="ts1"><div class="ts-dot">📖</div>Reading your tweets…</div>
+      <div class="ts" id="ts2"><div class="ts-dot">🎙</div>Catching your rhythm and tone…</div>
+      <div class="ts" id="ts3"><div class="ts-dot">✦</div>Writing your first drafts…</div>
+      <div class="ts" id="ts4"><div class="ts-dot">⚡</div>Watching what's trending in your niches…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div class="screen" id="appScreen" style="flex-direction:row">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">Cd</div>
+      <div>
+        <div class="logo-text">CreDra</div>
+        <div class="logo-sub">Creative · Draft</div>
+      </div>
+    </div>
+
+
+    <!-- Niche -->
+    <div class="niche-wrapper" id="nicheWrapper">
+      <div class="niche-sel" onclick="toggleNiche()">
+        <div>
+          <div class="niche-lbl">Current Niche</div>
+          <div class="niche-val" id="nicheDisplay">Immigration &amp; Law</div>
+        </div>
+        <span class="niche-arr">▾</span>
+      </div>
+      <div class="niche-drop" id="nicheDrop">
+        <div class="niche-opt sel" onclick="selNiche(this,'Immigration &amp; Law')"><span class="dot"></span>⚖️ Immigration &amp; Law</div>
+        <div class="niche-opt" onclick="selNiche(this,'Tech &amp; AI')"><span class="dot"></span>💻 Tech &amp; AI</div>
+        <div class="niche-opt" onclick="selNiche(this,'Business &amp; Finance')"><span class="dot"></span>📈 Business &amp; Finance</div>
+        <div class="niche-opt" onclick="selNiche(this,'Mindset &amp; Coaching')"><span class="dot"></span>🧠 Mindset &amp; Coaching</div>
+        <div class="niche-opt" onclick="selNiche(this,'Faith &amp; Lifestyle')"><span class="dot"></span>🙏 Faith &amp; Lifestyle</div>
+        <div class="niche-opt" onclick="selNiche(this,'Health &amp; Wellness')"><span class="dot"></span>💪 Health &amp; Wellness</div>
+        <div class="niche-opt" onclick="selNiche(this,'Marketing &amp; Growth')"><span class="dot"></span>📣 Marketing &amp; Growth</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-sec">Workspace</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="switchNav('dashboard')"><span class="nav-icon">⊞</span>Dashboard<span class="nav-badge">12</span></div>
+      <div class="nav-item" id="nav-replies" onclick="switchNav('replies')"><span class="nav-icon">↩</span>Replies<span class="nav-badge">7</span></div>
+      <div class="nav-item" id="nav-trends" onclick="switchNav('trends')"><span class="nav-icon">⚡</span>Trend Watch</div>
+      <div class="nav-sec">Review</div>
+      <div class="nav-item" id="nav-feedback" onclick="switchNav('feedback')"><span class="nav-icon">◎</span>Feedback History</div>
+      <div class="nav-item" id="nav-settings" onclick="switchNav('settings')"><span class="nav-icon">⚙</span>Settings</div>
+    </nav>
+
+    <div class="theme-toggle">
+      <div class="theme-btn active" id="darkBtn" onclick="setTheme('dark')">🌙 Dark</div>
+      <div class="theme-btn" id="lightBtn" onclick="setTheme('light')">☀ Light</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSubtitle">Tuesday, 21 April 2026 · 12 drafts ready for you</p>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-avatar-wrap" id="tavWrap" onclick="toggleTav(event)">
+          <div class="topbar-avatar" id="tavAv">TM</div>
+          <div class="topbar-avatar-drop" id="tavDrop">
+            <div class="tav-user">
+              <div class="tav-av" id="tavAvInner">TM</div>
+              <div>
+                <div class="tav-name" id="tavName">Dr. Taiwo M.</div>
+                <div class="tav-handle" id="tavHandle">@drtaiwom</div>
+              </div>
+            </div>
+            <div class="tav-switch-section">
+              <div class="tav-switch-label">Switch Account</div>
+              <div class="tav-switch-item cur-acct">
+                <div class="tav-switch-av" style="background:linear-gradient(135deg,#4FE3C1,#6C63FF)">TM</div>
+                <div class="tav-switch-info">
+                  <div class="tav-switch-name">Dr. Taiwo M.</div>
+                  <div class="tav-switch-handle">@drtaiwom</div>
+                </div>
+                <span class="tav-switch-active">● Active</span>
+              </div>
+              <div class="tav-switch-item" onclick="swAcct('Sir Jarus','@sirjarus','SJ','linear-gradient(135deg,#F5A623,#FF5B6B)')">
+                <div class="tav-switch-av" style="background:linear-gradient(135deg,#F5A623,#FF5B6B)">SJ</div>
+                <div class="tav-switch-info">
+                  <div class="tav-switch-name">Sir Jarus</div>
+                  <div class="tav-switch-handle">@sirjarus</div>
+                </div>
+              </div>
+              <div class="tav-switch-item add" onclick="goTo('connectScreen')">
+                <div class="tav-switch-av add-av">＋</div>
+                <div class="tav-switch-info">
+                  <div class="tav-switch-name">Add Account</div>
+                </div>
+              </div>
+            </div>
+            <div class="tav-action" onclick="switchNav('settings')">⚙ Settings</div>
+            <div class="tav-action red" onclick="goTo('loginScreen')">↪ Log Out</div>
+          </div>
+        </div>
+        <button class="qd-btn" onclick="document.getElementById('qModal').classList.add('open')">✦ Quick Draft</button>
+      </div>
+    </div>
+
+    <!-- ═ DASHBOARD ═ -->
+    <div class="content" id="panel-dashboard">
+
+      <!-- Welcome / Motivation -->
+      <div class="motiv" id="motivBanner">
+        <div class="motiv-emoji" id="motivEmoji">✦</div>
+        <div class="motiv-body">
+          <div class="motiv-title" id="motivTitle">You showed up. Now let your voice do the work.</div>
+          <div class="motiv-sub" id="motivSub">CreDra has been busy — 12 drafts written in your tone, across every niche you own. Review, post, and own your timeline today.</div>
+        </div>
+        <div class="motiv-x" onclick="this.closest('.motiv').style.display='none'">✕</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card sc-teal">
+          <div class="stat-lbl">Drafts Ready</div>
+          <div class="stat-num sn-teal">12</div>
+          <div class="stat-sub">5 tweets · 4 threads · 3 replies</div>
+          <div style="margin-top:10px;font-size:10px;color:var(--text3);font-weight:500;margin-bottom:6px">Posting streak</div>
+          <div class="sdots"><div class="sdot done">✓</div><div class="sdot done">✓</div><div class="sdot done">✓</div><div class="sdot done">✓</div><div class="sdot done">✓</div><div class="sdot today">6</div><div class="sdot"></div></div>
+        </div>
+        <div class="stat-card sc-violet">
+          <div class="stat-lbl">Voice Accuracy</div>
+          <div class="stat-num sn-violet">94%</div>
+          <div class="stat-sub">↑ 7% since last week's feedback</div>
+          <div style="margin-top:14px;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden"><div style="width:94%;height:100%;background:var(--grad);border-radius:2px"></div></div>
+        </div>
+        <div class="stat-card sc-amber">
+          <div class="stat-lbl">Trending in Niche</div>
+          <div class="stat-num sn-amber">8</div>
+          <div class="stat-sub">Topics live · 3 expiring soon</div>
+        </div>
+      </div>
+
+      <!-- Generated Drafts -->
+      <div class="sc">
+        <div class="sc-title" style="margin-bottom:4px">Generated Drafts</div>
+        <div class="sc-sub" style="margin-bottom:14px">Written in your voice. Review, edit, or post.</div>
+        <div class="sub-tabs" id="dash-stabs" style="margin-bottom:12px">
+          <div class="sub-tab active" data-niche="all" onclick="switchDashTab(this)">All</div>
+          <div class="sub-tab" data-niche="immigration" onclick="switchDashTab(this)">Immigration Tips</div>
+          <div class="sub-tab" data-niche="trending" onclick="switchDashTab(this)">Trending</div>
+          <div class="sub-tab" data-niche="mindset" onclick="switchDashTab(this)">Mindset</div>
+          <div class="sub-tab" data-niche="business" onclick="switchDashTab(this)">Business</div>
+        </div>
+        <div class="tone-row" id="toneRow">
+          <span class="tone-label">Tone:</span>
+        </div>
+        <div class="clip-banner panel-hidden" id="dashClip">✓ Copied to clipboard — ready to post on X</div>
+        <div class="drafts-grid" id="dashDrafts"></div>
+      </div>
+
+      <!-- Trending strip -->
+      <div class="sc">
+        <div class="sc-head">
+          <div>
+            <div class="sc-title"><span class="live-dot"></span>Your niche is moving. Here's where.</div>
+            <div class="sc-sub">Live conversations happening right now — draft a post before the moment passes.</div>
+          </div>
+          <div class="see-all" onclick="switchNav('trends')">See all →</div>
+        </div>
+        <div class="ti"><div class="ti-rank">#1</div><div class="ti-body"><div class="ti-name">#UKVisaChanges</div><div class="ti-ctx">Home Office raises skilled worker threshold — 24k+ posts</div></div><span class="ttag">🔥 Hot</span><span class="tage">2h ago</span><button class="dtb">Draft Post</button></div>
+        <div class="ti"><div class="ti-rank">#2</div><div class="ti-body"><div class="ti-name">#ImmigrationReform</div><div class="ti-ctx">Senate committee votes on family reunification bill</div></div><span class="ttag">Rising</span><span class="tage">5h ago</span><button class="dtb">Draft Post</button></div>
+        <div class="ti"><div class="ti-rank">#3</div><div class="ti-body"><div class="ti-name">#TierRoutes</div><div class="ti-ctx">Confusion around Health &amp; Care Worker points system</div></div><span class="ttag">Steady</span><span class="tage">9h ago</span><button class="dtb">Draft Post</button></div>
+      </div>
+
+      <!-- Learning log -->
+      <div class="sc">
+        <div class="sc-head">
+          <div>
+            <div class="sc-title">This is how CreDra gets sharper.</div>
+            <div class="sc-sub">Every correction you make trains it further into your voice.</div>
+          </div>
+          <div class="see-all" onclick="switchNav('feedback')">Full history →</div>
+        </div>
+        <div class="log-item"><div class="log-icon">↺</div><div><div class="log-text"><strong>Feedback absorbed:</strong> "Stop using the word 'pivotal'" — removed from vocabulary pool.</div><div class="log-time">2 hours ago</div></div></div>
+        <div class="log-item"><div class="log-icon">↺</div><div><div class="log-text"><strong>Style adjusted:</strong> Approved 4 consecutive threads with bold opening statements. Pattern weight increased.</div><div class="log-time">Yesterday, 6:14 PM</div></div></div>
+        <div class="log-item"><div class="log-icon">↺</div><div><div class="log-text"><strong>Voice note applied:</strong> "I never start tweets with I" — CreDra now opens with statements, questions, or nouns.</div><div class="log-time">Yesterday, 2:30 PM</div></div></div>
+      </div>
+    </div>
+
+    <!-- ═ REPLIES ═ -->
+    <div class="content panel-hidden" id="panel-replies">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:14px;font-weight:600">People are talking. Here's how you respond.</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px;font-weight:400">7 replies drafted in your voice — prioritised by who needs you most.</div>
+        </div>
+        <button class="reply-all-btn" onclick="openSwipe()">⚡ Reply All Flow</button>
+      </div>
+      <div class="sub-tabs" id="rep-stabs">
+        <div class="sub-tab active" onclick="gSub(this,'rep-stabs')">All Replies</div>
+        <div class="sub-tab" onclick="gSub(this,'rep-stabs')">High Priority</div>
+        <div class="sub-tab" onclick="gSub(this,'rep-stabs')">By Tweet</div>
+      </div>
+      <div class="reply-card">
+        <div class="orig-c"><div class="orig-meta">💬 @lawyerchuka · Tier 2 thread · <strong style="color:var(--danger)">43 likes</strong></div>"What happens if the employer refuses to adjust the salary? Any recourse for the worker?"</div>
+        <div class="reply-text">Great question. The worker has two options: raise a formal grievance internally, or contact the Home Office sponsor management team directly. The employer's CoS can be investigated if they're not meeting the stated salary. Document everything.</div>
+        <div class="reply-footer">
+          <div class="ox-btn">↗ Open on X</div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <span class="pbadge high">High priority</span>
+            <button class="abtn approve" onclick="doApprove(this,'')">Post This</button>
+            <button class="abtn edit">Edit</button>
+            <button class="abtn wa" onclick="sendWA(this)" title="Send to WhatsApp"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg> WhatsApp</button>
+          </div>
+        </div>
+      </div>
+      <div class="reply-card">
+        <div class="orig-c"><div class="orig-meta">💬 @amaka_moves · UK visa tweet · <strong style="color:var(--accent3)">18 likes</strong></div>"Does this affect people already on a valid visa or only new applicants?"</div>
+        <div class="reply-text">Only new applicants. If you're already on a valid skilled worker visa, your current conditions stay until your next renewal. At renewal the new threshold applies — plan ahead if you're renewing in the next 12 months.</div>
+        <div class="reply-footer">
+          <div class="ox-btn">↗ Open on X</div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <span class="pbadge med">Medium</span>
+            <button class="abtn approve" onclick="doApprove(this,'')">Post This</button>
+            <button class="abtn edit">Edit</button>
+            <button class="abtn wa" onclick="sendWA(this)" title="Send to WhatsApp"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg> WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═ TREND WATCH ═ -->
+    <div class="content panel-hidden" id="panel-trends">
+      <div>
+        <div style="font-size:14px;font-weight:600"><span class="live-dot"></span>Your niche is moving. Here's where.</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:3px">Filtered for: <strong style="color:var(--text2)" id="trendNiche">Immigration &amp; Law</strong></div>
+      </div>
+      <div class="sub-tabs" id="tr-stabs">
+        <div class="sub-tab active" onclick="gSub(this,'tr-stabs')">All Trends</div>
+        <div class="sub-tab" onclick="gSub(this,'tr-stabs')">🔥 Hot</div>
+        <div class="sub-tab" onclick="gSub(this,'tr-stabs')">Rising</div>
+        <div class="sub-tab" onclick="gSub(this,'tr-stabs')">Steady</div>
+      </div>
+      <div class="tfc"><div><div class="tfn">#UKVisaChanges</div><div class="tfc-ctx">The Home Office confirmed new minimum salary thresholds for skilled worker visa applicants rising from £26,200 to £38,700, effective immediately. Significant debate around impact on nurses and care workers.</div><div class="tfc-meta"><span class="ttag">🔥 Hot</span><span style="font-size:11px;color:var(--text3)">Relevance: <span class="relnum">98%</span></span><span class="tage">Active 2h · 24k posts</span></div></div><button class="dtb" style="padding:10px 18px;white-space:nowrap">Draft Post ✦</button></div>
+      <div class="tfc"><div><div class="tfn">#ImmigrationReform</div><div class="tfc-ctx">US Senate Judiciary Committee voted 11–9 to advance the Family Reunification Backlog Reduction Act. Global conversation among diaspora communities about pending petitions.</div><div class="tfc-meta"><span class="ttag">Rising</span><span style="font-size:11px;color:var(--text3)">Relevance: <span class="relnum">91%</span></span><span class="tage">Active 5h · 11k posts</span></div></div><button class="dtb" style="padding:10px 18px;white-space:nowrap">Draft Post ✦</button></div>
+      <div class="tfc"><div><div class="tfn">#TierRoutes</div><div class="tfc-ctx">Widespread confusion following UKVI guidance update on Health &amp; Care Worker points system. High misinformation risk — your audience needs a clear, authoritative voice right now.</div><div class="tfc-meta"><span class="ttag">Steady</span><span style="font-size:11px;color:var(--text3)">Relevance: <span class="relnum">87%</span></span><span class="tage">Active 9h · 7k posts</span></div></div><button class="dtb" style="padding:10px 18px;white-space:nowrap">Draft Post ✦</button></div>
+    </div>
+
+    <!-- ═ FEEDBACK ═ -->
+    <div class="content panel-hidden" id="panel-feedback">
+      <div>
+        <div style="font-size:14px;font-weight:600">This is how CreDra gets sharper.</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:3px">Every correction trains it further into your voice.</div>
+      </div>
+      <div class="vn-row"><input class="vn-field" type="text" placeholder='Teach CreDra something e.g. "I never use the word important"'/><button class="vn-add">+ Add</button></div>
+      <div class="fb-card"><div class="fb-lbl">Draft that triggered this</div><div class="fb-prev">"This is a pivotal moment for immigration law in the UK…"</div><div class="fb-lbl">Your feedback</div><div class="fb-given">"I never use the word 'pivotal' — it sounds corporate. Replace with something more direct."</div><div class="fb-outcome">✓ Word removed from vocabulary pool · 2 hours ago</div></div>
+      <div class="fb-card"><div class="fb-lbl">Draft that triggered this</div><div class="fb-prev">"I think we need to acknowledge that the system is complex…"</div><div class="fb-lbl">Your feedback</div><div class="fb-given">"I never start tweets with 'I'. Lead with the point, not me."</div><div class="fb-outcome">✓ Opening structure updated across all draft templates · Yesterday</div></div>
+      <div class="fb-card"><div class="fb-lbl">Pattern observed</div><div class="fb-prev">You approved 4 consecutive drafts opening with a bold, declarative statement followed by a line break.</div><div class="fb-lbl">CreDra inference</div><div class="fb-given">"Bold opening lines with deliberate whitespace — increasing the weight of this pattern across all niches."</div><div class="fb-outcome">✓ Pattern weight increased · Yesterday, 6:14 PM</div></div>
+    </div>
+
+    <!-- ═ SETTINGS ═ -->
+    <div class="content panel-hidden" id="panel-settings">
+      <div style="font-size:14px;font-weight:600">Settings</div>
+      <div class="set-card">
+        <div class="set-sec-lbl">Your Accounts</div>
+        <div class="set-acct-row">
+          <div class="set-av" style="background:linear-gradient(135deg,#4FE3C1,#6C63FF)">TM</div>
+          <div style="flex:1"><div class="set-acct-name">Dr. Taiwo M.</div><div class="set-acct-handle">@drtaiwom · 4,200 tweets read</div></div>
+          <span class="set-acct-badge">Active workspace</span>
+        </div>
+        <div class="set-acct-row">
+          <div class="set-av" style="background:linear-gradient(135deg,#F5A623,#FF5B6B)">SJ</div>
+          <div style="flex:1"><div class="set-acct-name">Sir Jarus</div><div class="set-acct-handle">@sirjarus · 12,100 tweets read</div></div>
+          <button class="set-btn" onclick="swAcct('Sir Jarus','@sirjarus','SJ','linear-gradient(135deg,#F5A623,#FF5B6B)')">Switch to this account</button>
+        </div>
+        <div style="margin-top:12px"><button class="set-btn" onclick="goTo('connectScreen')" style="margin-left:0">＋ Add New Account</button></div>
+
+        <div class="set-sec-lbl">X Connection</div>
+        <div class="set-row"><div><div class="set-lbl">X Account</div><div class="set-sub">@drtaiwom · Connected</div></div><button class="set-btn ok">● Connected</button></div>
+
+        <div class="set-sec-lbl">Content</div>
+        <div class="set-row"><div><div class="set-lbl">Niche Manager</div><div class="set-sub">Immigration &amp; Law · Mindset &amp; Coaching · Business &amp; Finance</div></div><button class="set-btn">Edit</button></div>
+        <div class="set-row"><div><div class="set-lbl">Voice Profile</div><div class="set-sub">Direct · No corporate jargon · Opens with statements · Lowercase for emphasis</div></div><button class="set-btn">Edit</button></div>
+        <div class="set-row"><div><div class="set-lbl">Draft Frequency</div><div class="set-sub">8 drafts per day across all niches</div></div><button class="set-btn">Adjust</button></div>
+
+        <div class="set-sec-lbl">Notifications</div>
+        <div class="set-row"><div><div class="set-lbl">Notification Preferences</div><div class="set-sub">Alerts for new drafts and trending topics</div></div><button class="set-btn">Manage</button></div>
+
+        <div class="set-sec-lbl">Account</div>
+        <div class="set-row"><div><div class="set-lbl">Log out of this account</div><div class="set-sub">Logs out @drtaiwom on this device</div></div><button class="set-btn red" onclick="goTo('loginScreen')">Log Out</button></div>
+        <div class="set-row"><div><div class="set-lbl">Switch account</div><div class="set-sub">Log in as a different user entirely</div></div><button class="set-btn" onclick="goTo('loginScreen')">Switch</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Quick Draft Modal -->
+<div class="modal-ov" id="qModal">
+  <div class="modal">
+    <div class="modal-title">What's on your mind?</div>
+    <div class="modal-sub">Drop a thought, a topic, or a tweet you saw. CreDra writes it in your voice.</div>
+    <textarea class="modal-ta" placeholder='e.g. "Write a thread on why most visa refusals are actually avoidable"'></textarea>
+    <div class="modal-foot">
+      <button class="m-cancel" onclick="document.getElementById('qModal').classList.remove('open')">Cancel</button>
+      <button class="m-submit">Generate Draft →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reply All Swipe Modal -->
+<div class="swipe-ov" id="swipeOv">
+  <div class="swipe-modal">
+    <button class="swipe-x" onclick="closeSwipe()">✕</button>
+    <div class="swipe-ctr" id="swipeCtr">Reply 1 of 3</div>
+    <div class="swipe-cmt" id="swipeCmt"></div>
+    <div class="swipe-dft" id="swipeDft"></div>
+    <div class="swipe-actions">
+      <button class="sw skip" onclick="nextSwipe()">Skip →</button>
+      <button class="sw ed">Edit</button>
+      <button class="sw post" onclick="nextSwipe()">Post This</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── SCREENS ── */
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── ONBOARDING ── */
+function selAcct(el){
+  document.querySelectorAll('.ca-row').forEach(r=>{r.classList.remove('sel');r.querySelector('.ca-check').style.display='none'});
+  el.classList.add('sel');el.querySelector('.ca-check').style.display='block';
+}
+function toggleNicheItem(el){el.classList.toggle('on')}
+function addCustomNiche(){
+  const inp=document.getElementById('nicheAddInput');
+  const val=inp.value.trim();
+  if(!val)return;
+  const tag=document.createElement('div');
+  tag.className='niche-custom-tag';
+  tag.innerHTML=val+'<span onclick="this.parentElement.remove()">✕</span>';
+  document.getElementById('customNicheTags').appendChild(tag);
+  inp.value='';
+}
+
+/* ── TRAINING ── */
+function startTraining(){
+  const steps=['ts1','ts2','ts3','ts4'];
+  let i=0;
+  steps.forEach(s=>document.getElementById(s).className='ts');
+  document.getElementById(steps[0]).className='ts active';
+  const tick=()=>{
+    if(i>0)document.getElementById(steps[i-1]).className='ts done';
+    if(i<steps.length){document.getElementById(steps[i]).className='ts active';i++;setTimeout(tick,1400);}
+    else{setTimeout(()=>goToApp('signup'),500);}
+  };
+  setTimeout(tick,1000);
+}
+
+/* ── NICHE DATA ── */
+const nicheConfig={
+  'Immigration & Law':{tones:['Professional','Informative','Urgent','Simplified','Friendly']},
+  'Tech & AI':{tones:['Analytical','Visionary','Simplified','Hype','Conversational']},
+  'Business & Finance':{tones:['Authority','Storytelling','Direct','Data-driven','Bold']},
+  'Mindset & Coaching':{tones:['Motivational','Raw','Conversational','Challenging','Warm']},
+  'Faith & Lifestyle':{tones:['Warm','Reflective','Inspiring','Personal','Gentle']},
+  'Health & Wellness':{tones:['Empathetic','Educational','Motivational','Scientific','Friendly']},
+  'Marketing & Growth':{tones:['Bold','Persuasive','Tactical','Storytelling','Direct']},
+};
+
+const nicheData={
+  immigration:[
+    {t:'thread',l:'🧵 Thread · 4 tweets',c:'<strong>Nobody tells you this about switching visa categories:</strong><br><br>You\'re not just changing paperwork — you\'re restarting the clock on your rights. Here are 4 things to check before you apply…',s:'high',p:'92%',chars:187},
+    {t:'tweet',l:'✦ Tweet',c:'Your visa was refused.<br><br>That\'s not the end. It\'s the beginning of a very specific set of next steps. Here\'s what to do in the first 48 hours.',s:'high',p:'97%',chars:152},
+    {t:'thread',l:'🧵 Thread · 5 tweets',c:'<strong>5 documents most people forget in a spousal visa application:</strong><br><br>Number 3 alone has caused more refusals than anything else I\'ve seen in 8 years of practice.',s:'high',p:'94%',chars:177},
+    {t:'tweet',l:'✦ Tweet',c:'Submit your visa application at least 28 days before your current leave expires.<br><br>Not 7. Not 14. 28. This is one of those things nobody tells you until it\'s too late.',s:'med',p:'76%',chars:172},
+  ],
+  trending:[
+    {t:'tweet',l:'✦ Tweet',c:'The UK just raised the salary threshold for skilled workers.<br><br>If you have a client on Tier 2 — they need to know this by Friday.',s:'high',p:'96%',chars:131},
+    {t:'thread',l:'🧵 Thread · 6 tweets',c:'<strong>The #TierRoutes confusion is real. Let me break it down:</strong><br><br>Three clients asked me the same question this week — here\'s the definitive answer on Health &amp; Care Worker points.',s:'high',p:'89%',chars:193},
+  ],
+  mindset:[
+    {t:'tweet',l:'✦ Tweet',c:'Consistency beats credentials on this app.<br><br>I know lawyers with PhDs who post twice a year. And coaches with no formal training who close 5 clients a month from X alone. Show up.',s:'med',p:'74%',chars:181},
+    {t:'tweet',l:'✦ Tweet',c:'The most dangerous thing you can do with your professional authority is hoard it.<br><br>Share what you know. Openly. The people who need you will find you.',s:'high',p:'88%',chars:153},
+  ],
+  business:[
+    {t:'tweet',l:'✦ Tweet',c:'Your X presence is not a social media strategy.<br><br>It\'s a referral network you own. Treat it that way.',s:'high',p:'93%',chars:103},
+    {t:'thread',l:'🧵 Thread · 3 tweets',c:'<strong>How I closed 3 consulting clients last month without a single cold DM:</strong><br><br>All three came from one thread I posted 6 weeks ago. Here\'s what was in it…',s:'high',p:'95%',chars:163},
+  ],
+  tech:[
+    {t:'tweet',l:'✦ Tweet',c:'AI is not replacing your job.<br><br>Someone using AI better than you is.<br><br>The gap between those two people is about 6 months of deliberate practice.',s:'high',p:'91%',chars:144},
+  ],
+  faith:[
+    {t:'tweet',l:'✦ Tweet',c:'Rest is not laziness.<br><br>It\'s trust. The belief that not everything depends on your hustle today.',s:'high',p:'90%',chars:91},
+  ],
+  health:[
+    {t:'tweet',l:'✦ Tweet',c:'Your sleep is your performance review.<br><br>Not the gym session. Not the supplements. Eight hours does more for your output than any biohack on the market.',s:'high',p:'88%',chars:156},
+  ],
+  marketing:[
+    {t:'tweet',l:'✦ Tweet',c:'The best marketing strategy in 2026 is the same as 2006.<br><br>Be interesting. Be consistent. Be useful.',s:'high',p:'92%',chars:101},
+    {t:'thread',l:'🧵 Thread · 5 tweets',c:'<strong>How to build an audience without going viral:</strong><br><br>Viral is luck. Audience is a system. Here\'s what grew my following by 8k in 4 months.',s:'high',p:'94%',chars:152},
+  ],
+};
+
+function mkCard(d,clipId){
+  const cc=d.chars>260?'over':d.chars>230?'warn':'';
+  return`<div class="draft-card">
+    <div class="dtype ${d.t}">${d.l}</div>
+    <div class="dcontent">${d.c}</div>
+    <div class="draft-meta">
+      <span class="char-count ${cc}">${d.chars}/280</span>
+      <span class="best-time">⏰ Best: 7–9 AM · 7–9 PM</span>
+    </div>
+    <div class="dfooter">
+      <div class="vscore"><span class="vlbl">Voice match</span><div class="vbar"><div class="vfill ${d.s}"></div></div><span class="vpct ${d.s}">${d.p}</span></div>
+      <div class="dactions">
+        <button class="abtn approve" onclick="doApprove(this,'${clipId}')">Post This</button>
+        <button class="abtn edit">Edit</button>
+        <button class="abtn regen" title="Try again" onclick="regenCard(this)">↺</button>
+        <button class="abtn notme" onclick="doDiscard(this)">Not me</button>
+        <button class="abtn wa" onclick="sendWA(this)" title="Send to WhatsApp"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg></button>
+      </div>
+    </div>
+    <div class="discard-fb"><input class="discard-inp" placeholder="What didn't feel like you? (shapes your next draft)"/><button class="discard-send" onclick="doSendFb(this)">Send</button></div>
+  </div>`;
+}
+
+/* ── DASHBOARD TABS ── */
+function switchDashTab(el){
+  document.querySelectorAll('#dash-stabs .sub-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderDashDrafts(el.dataset.niche);
+}
+function renderDashDrafts(niche){
+  let data=[];
+  if(niche==='all'){Object.values(nicheData).forEach(a=>{if(Array.isArray(a))data.push(...a)});}
+  else data=nicheData[niche]||[];
+  document.getElementById('dashDrafts').innerHTML=data.map(d=>mkCard(d,'dashClip')).join('');
+}
+
+/* ── TONES ── */
+function switchTone(el){
+  document.querySelectorAll('#toneRow .tone-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+function renderTones(niche){
+  const cfg=nicheConfig[niche]||nicheConfig['Immigration & Law'];
+  document.getElementById('toneRow').innerHTML=
+    '<span class="tone-label">Tone:</span>'+
+    cfg.tones.map((t,i)=>`<div class="tone-chip${i===0?' active':''}" onclick="switchTone(this)">${t}</div>`).join('');
+}
+
+/* ── NICHE ── */
+function toggleNiche(){document.getElementById('nicheWrapper').classList.toggle('open')}
+function selNiche(el,val){
+  document.querySelectorAll('.niche-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('nicheDisplay').innerHTML=val;
+  document.getElementById('trendNiche').innerHTML=val;
+  document.getElementById('nicheWrapper').classList.remove('open');
+  renderTones(val);
+  document.querySelector('#dash-stabs .sub-tab[data-niche="all"]').click();
+}
+
+/* ── ACCOUNT SWITCHER ── */
+function toggleAcct(e){e.stopPropagation();document.getElementById('acctSw').classList.toggle('open')}
+function swAcct(name,handle,init,grad){
+  document.getElementById('sbName').textContent=name;
+  document.getElementById('sbHandle').textContent=handle;
+  document.getElementById('sbAv').textContent=init;
+  document.getElementById('sbAv').style.background=grad;
+  document.getElementById('acctSw').classList.remove('open');
+  // sync topbar avatar
+  const tav=document.getElementById('tavAv');
+  if(tav){tav.childNodes[0].textContent=init;tav.style.background=grad;}
+  const tn=document.getElementById('tavName');
+  if(tn)tn.textContent=name;
+  const th=document.getElementById('tavHandle');
+  if(th)th.textContent=handle;
+}
+
+/* ── NAV ── */
+const allPanels=['dashboard','replies','trends','feedback','settings'];
+const meta={
+  dashboard:['Dashboard','Tuesday, 21 April 2026 · 12 drafts ready for you'],
+  replies:['Replies','People are talking — here\'s how you respond'],
+  trends:['Trend Watch','Your niche is moving. Here\'s where.'],
+  feedback:['Feedback History','Every correction makes CreDra sharper'],
+  settings:['Settings','Manage your account & preferences'],
+};
+function switchNav(p){
+  allPanels.forEach(x=>{
+    document.getElementById('panel-'+x).classList.toggle('panel-hidden',x!==p);
+    const n=document.getElementById('nav-'+x);
+    if(n)n.classList.toggle('active',x===p);
+  });
+  const[t,s]=meta[p];
+  document.getElementById('pageTitle').textContent=t;
+  document.getElementById('pageSubtitle').textContent=s;
+}
+function gSub(el,gid){
+  document.querySelectorAll('#'+gid+' .sub-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ── DRAFT ACTIONS ── */
+function doApprove(btn,clipId){
+  const c=btn.closest('.draft-card,.reply-card');
+  c.style.opacity='0.4';c.style.pointerEvents='none';
+  if(clipId){const b=document.getElementById(clipId);if(b){b.classList.remove('panel-hidden');setTimeout(()=>b.classList.add('panel-hidden'),3000);}}
+}
+function doDiscard(btn){btn.closest('.draft-card').querySelector('.discard-fb').classList.toggle('open')}
+function doSendFb(btn){const c=btn.closest('.draft-card');c.style.opacity='0.3';c.style.pointerEvents='none';}
+function regenCard(btn){const c=btn.closest('.draft-card');c.style.opacity='0.5';setTimeout(()=>c.style.opacity='1',800);}
+function sendWA(btn){
+  const c=btn.closest('.draft-card,.reply-card');
+  const txt=c.querySelector('.dcontent,.reply-text')?.innerText||'';
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+
+/* ── SWIPE ── */
+const swipeData=[
+  {from:'@lawyerchuka',cmt:'"What happens if the employer refuses to adjust the salary?"',dft:'The worker has two options: raise a formal grievance internally, or contact the Home Office sponsor management team directly. Document everything.'},
+  {from:'@amaka_moves',cmt:'"Does this affect people already on a valid visa?"',dft:'Only new applicants. Current conditions stay until renewal — but plan ahead if you\'re renewing in the next 12 months.'},
+  {from:'@migrant_matters',cmt:'"How do you stay consistent when life is hectic?"',dft:'I batch. One Saturday morning, two hours, all posts for the week drafted. The consistency is built in — not squeezed in.'},
+];
+let si=0;
+function openSwipe(){si=0;showSwipe();document.getElementById('swipeOv').classList.add('open')}
+function closeSwipe(){document.getElementById('swipeOv').classList.remove('open')}
+function showSwipe(){
+  const r=swipeData[si];
+  document.getElementById('swipeCtr').textContent=`Reply ${si+1} of ${swipeData.length}`;
+  document.getElementById('swipeCmt').innerHTML=`<strong>${r.from}</strong> · ${r.cmt}`;
+  document.getElementById('swipeDft').textContent=r.dft;
+}
+function nextSwipe(){si++;if(si>=swipeData.length){closeSwipe();return}showSwipe()}
+
+/* ── CLOSE ON BACKDROP ── */
+['qModal','swipeOv'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget)e.target.classList.remove('open')});
+});
+
+/* ── NAVIGATE TO APP WITH CORRECT BANNER ── */
+function goToApp(via){
+  // Set banner based on how user got here
+  const emoji=document.getElementById('motivEmoji');
+  const title=document.getElementById('motivTitle');
+  const sub=document.getElementById('motivSub');
+  const banner=document.getElementById('motivBanner');
+  if(via==='login'){
+    // Returning user — show streak
+    if(emoji) emoji.textContent='🔥';
+    if(title) title.textContent="Day 6 streak — you're on a roll.";
+    if(sub) sub.textContent="Your audience is paying attention. One post today keeps the momentum alive.";
+  } else {
+    // New user from signup/training — show welcome
+    if(emoji) emoji.textContent='✦';
+    if(title) title.textContent="You showed up. Now let your voice do the work.";
+    if(sub) sub.textContent="CreDra has been busy — 12 drafts written in your tone, across every niche you own. Review, post, and own your timeline today.";
+  }
+  if(banner) banner.style.display='';
+  goTo('appScreen');
+}
+
+/* ── TOPBAR AVATAR DROPDOWN ── */
+function toggleTav(e){
+  e.stopPropagation();
+  document.getElementById('tavWrap').classList.toggle('open');
+}
+
+/* ── CLOSE DROPDOWNS ON OUTSIDE CLICK ── */
+document.addEventListener('click',e=>{
+  const nw=document.getElementById('nicheWrapper');
+  if(nw&&!nw.contains(e.target))nw.classList.remove('open');
+  const as=document.getElementById('acctSw');
+  if(as&&!as.contains(e.target))as.classList.remove('open');
+  const tv=document.getElementById('tavWrap');
+  if(tv&&!tv.contains(e.target))tv.classList.remove('open');
+});
+
+/* ── THEME ── */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('darkBtn').classList.toggle('active',t==='dark');
+  document.getElementById('lightBtn').classList.toggle('active',t==='light');
+}
+
+/* ── INIT ── */
+renderDashDrafts('all');
+renderTones('Immigration & Law');
+
+</script>
+</body>
+</html>
